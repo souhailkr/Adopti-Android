@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Adopt</string>
+    <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mapbox_access_token">pk.eyJ1Ijoic291aGFpbGtyIiwiYSI6ImNqcDhwOXF1ODAzenAzeHJwMDIza21sYmcifQ.3W4Mmmua5TsMInuIrOte8Q</string>
+
+</resources>
