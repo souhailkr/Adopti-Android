@@ -26,6 +26,29 @@ public class Pet {
     String gender ;
     @SerializedName("age")
     int age ;
+    @SerializedName("User")
+    User user ;
+
+    public Pet(int id, String name, String image, String desc, String breed, String size, String type, String gender, int age, User user) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.desc = desc;
+        this.breed = breed;
+        this.size = size;
+        this.type = type;
+        this.gender = gender;
+        this.age = age;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public int getAge() {
         return age;

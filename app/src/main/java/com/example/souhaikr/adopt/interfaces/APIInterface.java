@@ -28,13 +28,21 @@ public interface APIInterface {
     public Call<List<Pet>> doGetList() ;
 
     @GET("/getpet/{id}")
-    public Call<List<Pet>> getPet(@Path("id") int id);
+    public Call<Pet> getPet(@Path("id") int id);
 
     @Multipart
     @POST("/addpet")
     Call<Pet> getDetails(
                                   @Part MultipartBody.Part photo,
-                                  @Part("name") RequestBody name
+                                  @Part("name") RequestBody name,
+                                  @Part("description") RequestBody desc,
+                                  @Part("type") RequestBody type,
+                                  @Part("breed") RequestBody breed,
+                                  @Part("sexe") RequestBody gender,
+                                  @Part("size") RequestBody size,
+
+                                  @Part("age") RequestBody age,
+                                  @Part("image") RequestBody image
 
 
     );

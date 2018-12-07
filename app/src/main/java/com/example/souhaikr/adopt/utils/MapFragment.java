@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,6 +29,7 @@ import com.example.souhaikr.adopt.entities.Pet;
 import com.example.souhaikr.adopt.entities.User;
 import com.example.souhaikr.adopt.interfaces.APIInterface;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -76,7 +78,7 @@ public class MapFragment extends Fragment {
                         .snippet("Illinois")
                 );
                 mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(41.700,-87.660))
+                        .position(new LatLng(40.700,-85.660))
                         .title("aaaaa")
 
                         .snippet("Illinois")
@@ -86,6 +88,35 @@ public class MapFragment extends Fragment {
                         .target(new LatLng(41.885,-87.679))
                         .zoom(14)
                         .build());
+
+                mapboxMap.setInfoWindowAdapter(new MapboxMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(@NonNull Marker marker) {
+
+                        View v = getLayoutInflater().inflate(R.layout.info_window, null);
+
+                        ImageView test =  v.findViewById(R.id.badge);
+
+                        return v;
+                    }
+                });
+
+                mapboxMap.setOnInfoWindowClickListener(new MapboxMap.OnInfoWindowClickListener() {
+
+                    @Override
+                    public boolean onInfoWindowClick(@NonNull Marker marker) {
+
+                        Fragment fragment = new HomeFragment();
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.frame, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+
+                        return false;
+                    }
+                });
 
 // Customize map with markers, polylines, etc.
 

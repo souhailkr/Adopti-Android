@@ -10,7 +10,7 @@
     <dimen name="icon_height">60dip</dimen>
     <dimen name="icon_padding">4dp</dimen>
     <dimen name="card_height">150dip</dimen>
-    <dimen name="text_size">18sp</dimen>
+    <dimen name="text_size">20sp</dimen>
     <item name="normal_speed" type="dimen" format="float">100</item>
     <item name="high_speed" type="dimen" format="float">50</item>
     <item name="low_speed" type="dimen" format="float">120</item>

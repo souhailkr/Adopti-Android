@@ -13,13 +13,13 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".utils.MainActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +32,9 @@
             android:name=".utils.BottomNavigationActivity"
             android:label="@string/title_activity_bottom_navigation"
             android:theme="@style/App" />
-        <activity android:name=".utils.AddPostActivity"></activity>
+        <activity android:name=".utils.AddPostActivity"
+            android:label="Add a post"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

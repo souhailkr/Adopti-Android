@@ -45,7 +45,7 @@ public class DetailsFragment extends Fragment {
     TextView age ;
     TextView gender ;
     TextView siz ;
-    private List<Pet> contacts;
+    private Pet contacts;
 
 
 
@@ -78,11 +78,11 @@ public class DetailsFragment extends Fragment {
 
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<List<Pet>>call = apiInterface.getPet(id);
+        Call<Pet>call = apiInterface.getPet(id);
         Log.d("TAG", "bbbbbbbbbba");
-        call.enqueue(new Callback<List<Pet>>() {
+        call.enqueue(new Callback<Pet>() {
             @Override
-            public void onResponse(Call<List<Pet>> call, Response<List<Pet>> response) {
+            public void onResponse(Call<Pet> call, Response<Pet> response) {
 //
 //                for(User size: response.body()) {
 //                    System.out.println(size.toString());
@@ -101,29 +101,29 @@ public class DetailsFragment extends Fragment {
                 Log.d("TAG", "aaaaaaaaaaaaa");
 
 
-                for(Pet size: contacts) {
-
-
-                    String text = size.getName();
-                    String desc1 = size.getDesc();
-                    String breed1 = size.getBreed() ;
-                    String gende1 = size.getGender() ;
-                    String size1 = size.getSize() ;
-                    int ag = size.getAge() ;
-
-
-                    String url = size.getImage();
-                    tv.setText(text);
-                    desc.setText(desc1) ;
-                    breed.setText(breed1) ;
-                    gender.setText(gende1) ;
-                    siz.setText(size1);
-                    age.setText((String.valueOf(ag)+" Months"));
-
-
-                    Picasso.get().load(url).into(iv);
-                    Log.d("TAG", text);
-                }
+//                for(Pet size: contacts) {
+//
+//
+//                    String text = size.getName();
+//                    String desc1 = size.getDesc();
+//                    String breed1 = size.getBreed() ;
+//                    String gende1 = size.getGender() ;
+//                    String size1 = size.getSize() ;
+//                    int ag = size.getAge() ;
+//
+//
+//                    String url = size.getImage();
+//                    tv.setText(text);
+//                    desc.setText(desc1) ;
+//                    breed.setText(breed1) ;
+//                    gender.setText(gende1) ;
+//                    siz.setText(size1);
+//                    age.setText((String.valueOf(ag)+" Months"));
+//
+//
+//                    Picasso.get().load(url).into(iv);
+//                    Log.d("TAG", text);
+//                }
 
 
 
@@ -132,7 +132,7 @@ public class DetailsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Pet>> call, Throwable t) {
+            public void onFailure(Call<Pet> call, Throwable t) {
                 call.cancel();
                 Log.d("TAG", "ccccccc");
             }
