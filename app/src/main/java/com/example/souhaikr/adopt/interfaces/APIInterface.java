@@ -24,11 +24,23 @@ import retrofit2.http.Path;
 
 public interface APIInterface {
 
+
+
+    @GET("/getPetsByUser/{id}")
+    public Call<List<Pet>> getPetsByUser(@Path("id") int id);
+
+
     @GET("/getpets")
     public Call<List<Pet>> doGetList() ;
 
+    @GET("/showallusers")
+    public Call<List<User>> doGetListUsers() ;
+
     @GET("/getpet/{id}")
     public Call<Pet> getPet(@Path("id") int id);
+
+    @GET("/getpets/{type}")
+    public Call<List<Pet>> getPetsByType(@Path("type") String type);
 
     @Multipart
     @POST("/addpet")
@@ -42,7 +54,9 @@ public interface APIInterface {
                                   @Part("size") RequestBody size,
 
                                   @Part("age") RequestBody age,
-                                  @Part("image") RequestBody image
+                                  @Part("image") RequestBody image,
+                                  @Part("altitude") RequestBody latitude  ,
+                                  @Part("longitude") RequestBody longitude
 
 
     );

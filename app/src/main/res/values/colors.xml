@@ -4,4 +4,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#2db9ff</color>
+    <color name="mapboxGreen">#33c377</color>
+    <color name="mapboxRed">#f74e4e</color>
+    <color name="black">#000000</color>
+    <color name="profile_meta">#333</color>
 </resources>

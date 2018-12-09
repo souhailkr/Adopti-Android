@@ -3,23 +3,21 @@
     package="com.example.souhaikr.adopt">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-
-
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-
+        android:label="Adopti"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".utils.MainActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:name=".utils.BottomNavigationActivity"
+            android:theme="@style/App">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,13 +26,18 @@
         </activity>
         <activity android:name=".utils.LoginActivity" />
         <activity android:name=".utils.SignupActivity" />
+        <!-- <activity -->
+        <!-- android:name=".utils.BottomNavigationActivity" -->
+        <!-- android:label="@string/title_activity_bottom_navigation" -->
+        <!-- android:theme="@style/App" /> -->
         <activity
-            android:name=".utils.BottomNavigationActivity"
-            android:label="@string/title_activity_bottom_navigation"
-            android:theme="@style/App" />
-        <activity android:name=".utils.AddPostActivity"
+            android:name=".utils.AddPostActivity"
             android:label="Add a post"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".utils.DetailsActivity" />
+        <activity android:name=".utils.SearchList" />
+        <activity android:name=".utils.MorePostsActivity" />
+        <activity android:name=".utils.UserProfileActivity"></activity>
     </application>
 
 </manifest>

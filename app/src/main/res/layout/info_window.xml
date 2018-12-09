@@ -15,6 +15,7 @@
         android:layout_height="100dp"
         android:layout_marginRight="5dp"
         android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/logo"></ImageView>
 
     <LinearLayout
@@ -56,6 +57,19 @@
             android:text="Size : M"
             android:textColor="#ff7f7f7f"
             android:textSize="14dp" />
+
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+
+        android:layout_marginLeft="10dp"
+
+
+        android:layout_weight="1"
+        app:srcCompat="@drawable/mapbox_info_icon_default" />
 
 </LinearLayout>

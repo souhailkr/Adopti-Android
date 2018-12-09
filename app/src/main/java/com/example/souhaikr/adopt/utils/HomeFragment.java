@@ -3,6 +3,7 @@ package com.example.souhaikr.adopt.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,14 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.souhaikr.adopt.R;
 import com.example.souhaikr.adopt.controllers.APIClient;
-import com.example.souhaikr.adopt.controllers.ListPetsAdapter;
+import com.example.souhaikr.adopt.controllers.RecyclerViewAdapter;
+import com.example.souhaikr.adopt.controllers.UsersViewAdapter;
 import com.example.souhaikr.adopt.entities.Pet;
 import com.example.souhaikr.adopt.entities.User;
 import com.example.souhaikr.adopt.interfaces.APIInterface;
@@ -32,6 +33,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -40,24 +43,14 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
 
-
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_home, container, false);
-//
-//    }
-
-
-    private ListPetsAdapter adapter;
-
     APIInterface apiInterface;
     TextView responseText;
     private List<Pet> contacts;
+    private List<User> users;
     private ArrayList<Pet> cats = new ArrayList<>() ;
     private ArrayList<Pet> dogs = new ArrayList<>() ;
     private ArrayList<Pet> others = new ArrayList<>() ;
+    private ArrayList<User> usersList = new ArrayList<>() ;
 
 
     private DetailsFragment detailsFragment ;
@@ -72,7 +65,24 @@ public class HomeFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
-        detailsFragment = new DetailsFragment() ;
+        detailsFragment = new DetailsFragment();
+        TextView more = view.findViewById(R.id.more);
+
+        more.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "wa", Toast.LENGTH_SHORT).show();
+                onCli() ;
+
+
+
+
+            }
+
+        });
+
+
 
 
 
@@ -80,19 +90,59 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<List<User>> callApi = apiInterface.doGetListUsers();
+        callApi.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> callApi, Response<List<User>> response) {
+
+
+
+
+                    users = response.body();
+                    //contacts.addAll(response.body());
+                    Log.d("TAG", String.valueOf(users));
+
+
+                    for (User user : users) {
+                        usersList.add(user);
+
+                    }
+
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                    RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+                    recyclerView.setLayoutManager(layoutManager);
+                    UsersViewAdapter adapter = new UsersViewAdapter(getActivity(), usersList);
+                    recyclerView.setAdapter(adapter);
+
+
+
+
+
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> callApi, Throwable t) {
+                callApi.cancel();
+            }
+        });
+
+
+
+
+
+
+
+
         Call<List<Pet>> call = apiInterface.doGetList();
         call.enqueue(new Callback<List<Pet>>() {
             @Override
             public void onResponse(Call<List<Pet>> call, Response<List<Pet>> response) {
-//
-//                for(User size: response.body()) {
-//                    System.out.println(size.toString());
-//                    String displayResponse = "";
-//                    String text = size.name;
-//                    String total = size.password;
-//
-//                    displayResponse += text + " Page\n" + total + " Total\n" ;
-//                    Log.d("TAG",displayResponse);
+
+
 
                 contacts = response.body();
                 //contacts.addAll(response.body());
@@ -110,11 +160,11 @@ public class HomeFragment extends android.support.v4.app.Fragment {
                     String text = size.getType();
                     String total = size.getImage();
 
-                    if (text.equals("cat"))
+                    if (text.equals("Cat"))
                     {
                         cats.add(size);
                     }
-                    else if (text.equals("dog"))
+                    else if (text.equals("Dog"))
                     {
                         dogs.add(size);
                     }
@@ -126,6 +176,8 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
                 }
+
+
 
 
 
@@ -162,12 +214,6 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
 
-
-
-
-
-
-
             }
 
             @Override
@@ -178,8 +224,20 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
 
+
+
+
+
         return view ;
 
+    }
+
+    private void onCli() {
+
+        Intent intent = new Intent(getActivity(), MorePostsActivity.class);
+        String type = "Cat";
+        intent.putExtra("type", type);
+        startActivity(intent);
     }
 
     private void setFragment(android.support.v4.app.Fragment fragment) {
@@ -188,6 +246,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
         fragmentTransaction.commit();
 
     }
+
 
     public class MyAdapter extends RecyclerView.Adapter<HomeFragment.MyViewHolder> {
         private ArrayList<Pet> list;
@@ -225,16 +284,22 @@ public class HomeFragment extends android.support.v4.app.Fragment {
                 @SuppressLint("ResourceType")
                 @Override
                 public void onClick(View v) {
-                    Log.d("TAG", String.valueOf(position));
+//                    Log.d("TAG", String.valueOf(position));
+//
+//                    FragmentManager fm = getFragmentManager();
+//                    FragmentTransaction ft = fm.beginTransaction();
+//                    DetailsFragment llf = new DetailsFragment();
+//                    Bundle arguments = new Bundle();
+//                    arguments.putString( "key" , String.valueOf(x));
+//                    llf.setArguments(arguments);
+//                    ft.replace(R.id.frame, llf);
+//                    ft.commit();
+                    int id_ = list.get(position).getId() ;
 
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    DetailsFragment llf = new DetailsFragment();
-                    Bundle arguments = new Bundle();
-                    arguments.putString( "key" , String.valueOf(x));
-                    llf.setArguments(arguments);
-                    ft.replace(R.id.frame, llf);
-                    ft.commit();
+                    String id = String.valueOf(id_);
+                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
                 }
             });
         }

@@ -18,6 +18,10 @@ import com.example.souhaikr.adopt.R;
 public class BottomNavigationActivity extends AppCompatActivity {
     private android.support.v4.app.Fragment homeFragment = new HomeFragment() ;
     private android.support.v4.app.Fragment mapFragment = new MapFragment();
+    private android.support.v4.app.Fragment searchFragment = new SearchFragment();
+    private android.support.v4.app.Fragment profileFragment = new ProfileFragment();
+
+
 
     private TextView mTextMessage;
     final FragmentManager fm = getSupportFragmentManager();
@@ -49,12 +53,14 @@ public class BottomNavigationActivity extends AppCompatActivity {
                     //setFragment(mapFragment) ;
                     return true;
                 case R.id.navigation_search:
-                    mTextMessage.setText("search");
-
+                    fm.beginTransaction().hide(active).show(searchFragment).commit();
+                    active = searchFragment;
 
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    fm.beginTransaction().hide(active).show(profileFragment).commit();
+                    active = profileFragment;
+
 
 
                     return true;
@@ -76,8 +82,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_bottom_navigation);
 
-
-
+        fm.beginTransaction().add(R.id.frame, profileFragment, "4").hide(profileFragment).commit();
+        fm.beginTransaction().add(R.id.frame, searchFragment, "3").hide(searchFragment).commit();
         fm.beginTransaction().add(R.id.frame, mapFragment, "2").hide(mapFragment).commit();
         fm.beginTransaction().add(R.id.frame,homeFragment, "1").commit();
 

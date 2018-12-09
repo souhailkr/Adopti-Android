@@ -8,6 +8,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
 
+    @SerializedName("id")
+    int id ;
+
     @SerializedName("firstName")
     public String firstname;
     @SerializedName("lastName")
@@ -20,6 +23,17 @@ public class User {
     public String num_tel;
     @SerializedName("password")
     public String password;
+
+    public User() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstname() {
         return firstname;

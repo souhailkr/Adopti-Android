@@ -2,16 +2,22 @@ package com.example.souhaikr.adopt.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -65,7 +71,8 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
     CheckBox female ;
     Button savebtn ;
     File f ;
-
+    double longitude;
+    double latitude ;
 
 
 
@@ -132,6 +139,9 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
                 String postAge = age.getText().toString().trim() ;
                 String gender = null;
                 String size = null ;
+                String lat = String.valueOf(latitude);
+                String lon = String.valueOf(longitude);
+
 
                 if(female.isChecked()){
                 gender = "female" ;
@@ -155,9 +165,12 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
                     size = "large" ;
                 }
 
-                Log.i("TAG", "ErrorA: "+ gender+size+f.getName()+postAge+postDesc+postAge+type+breed+postName);
 
-                uploadImg(f,postName,postDesc,type,breed,gender,size,postAge);
+                if (latitude > 0 && longitude> 0) {
+                    uploadImg(f,postName,postDesc,type,breed,gender,size,postAge,lat,lon);
+                }
+
+
                 
                     
             }
@@ -202,10 +215,73 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
                 startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
             }
         });
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled && !network_enabled) {
+            // notify user
+            android.support.v7.app.AlertDialog.Builder dialog = new android.support.v7.app.AlertDialog.Builder(this);
+            dialog.setTitle("Location services OFF") ;
+            dialog.setMessage(this.getResources().getString(R.string.gps_network_not_enabled));
+            dialog.setPositiveButton(this.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton(this.getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+            dialog.show();
+        }
 
 
 
     }
+    private final LocationListener locationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+
+
+        }
+    };
 
 
     public void onCheckboxClicked(View view) {
@@ -305,7 +381,8 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
         }
     }
 
-    private void uploadImg(File f,String name,String description,String type,String breed,String gender,String size,String age) {
+    private void uploadImg(File f,String name,String description,String type,String breed,String gender,String size,String age
+    ,String lat , String lon) {
 
 
         RequestBody requestFile =
@@ -320,6 +397,11 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
 // add another part within the multipart request
         RequestBody image =
                 RequestBody.create( okhttp3.MultipartBody.FORM, f.getName());
+        RequestBody post_lat =
+                RequestBody.create(MediaType.parse("multipart/form-data"),lat);
+
+        RequestBody post_long =
+                RequestBody.create(MediaType.parse("multipart/form-data"),lon);
 
         RequestBody post_age =
                 RequestBody.create(MediaType.parse("multipart/form-data"),age);
@@ -343,7 +425,7 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
 
 
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<Pet> call = apiInterface.getDetails(body,post_name,post_desc,post_type,post_breed,post_gender,post_size,post_age,image);
+        Call<Pet> call = apiInterface.getDetails(body,post_name,post_desc,post_type,post_breed,post_gender,post_size,post_age,image,post_lat,post_long);
         call.enqueue(new Callback<Pet>() {
             @Override
             public void onResponse(Call<Pet> call, Response<Pet> response) {

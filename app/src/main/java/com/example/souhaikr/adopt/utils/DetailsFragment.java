@@ -2,31 +2,19 @@ package com.example.souhaikr.adopt.utils;
 
 
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.example.souhaikr.adopt.R;
 import com.example.souhaikr.adopt.controllers.APIClient;
-import com.example.souhaikr.adopt.controllers.ListPetsAdapter;
 import com.example.souhaikr.adopt.entities.Pet;
-import com.example.souhaikr.adopt.entities.User;
 import com.example.souhaikr.adopt.interfaces.APIInterface;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
-
-import java.security.KeyStore;
-import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,7 +33,7 @@ public class DetailsFragment extends Fragment {
     TextView age ;
     TextView gender ;
     TextView siz ;
-    private Pet contacts;
+    private Pet pet;
 
 
 
@@ -83,45 +71,29 @@ public class DetailsFragment extends Fragment {
         call.enqueue(new Callback<Pet>() {
             @Override
             public void onResponse(Call<Pet> call, Response<Pet> response) {
-//
-//                for(User size: response.body()) {
-//                    System.out.println(size.toString());
-//                    String displayResponse = "";
-//                    String text = size.name;
-//                    String total = size.password;
-//
-//                    displayResponse += text + " Page\n" + total + " Total\n" ;
-//                    Log.d("TAG",displayResponse);
 
-
-
-
-                 contacts = response.body();
-                Log.d("TAG", String.valueOf(contacts));
+                 pet = response.body();
+                Log.d("TAG", String.valueOf(pet));
                 Log.d("TAG", "aaaaaaaaaaaaa");
 
+                    String text = pet.getName();
+                    String desc1 = pet.getDesc();
+                    String breed1 =pet.getBreed() ;
+                    String gende1 = pet.getGender() ;
+                    String size1 = pet.getSize() ;
+                    int ag = pet.getAge() ;
 
-//                for(Pet size: contacts) {
-//
-//
-//                    String text = size.getName();
-//                    String desc1 = size.getDesc();
-//                    String breed1 = size.getBreed() ;
-//                    String gende1 = size.getGender() ;
-//                    String size1 = size.getSize() ;
-//                    int ag = size.getAge() ;
-//
-//
-//                    String url = size.getImage();
-//                    tv.setText(text);
-//                    desc.setText(desc1) ;
-//                    breed.setText(breed1) ;
-//                    gender.setText(gende1) ;
-//                    siz.setText(size1);
-//                    age.setText((String.valueOf(ag)+" Months"));
-//
-//
-//                    Picasso.get().load(url).into(iv);
+
+                    String url = pet.getImage();
+                    tv.setText(text);
+                    desc.setText(desc1) ;
+                    breed.setText(breed1) ;
+                    gender.setText(gende1) ;
+                    siz.setText(size1);
+                    age.setText((String.valueOf(ag)+" Months"));
+
+
+                    Picasso.get().load(url).into(iv);
 //                    Log.d("TAG", text);
 //                }
 

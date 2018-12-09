@@ -1,6 +1,7 @@
 package com.example.souhaikr.adopt.entities;
 
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.mapboxsdk.annotations.Marker;
 
 /**
  * Created by SouhaiKr on 01/12/2018.
@@ -28,6 +29,41 @@ public class Pet {
     int age ;
     @SerializedName("User")
     User user ;
+    @SerializedName("altitude")
+    Double latitude ;
+    @SerializedName("longitude")
+    Double longitude ;
+
+    Marker marker ;
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public void setMarker(Marker marker) {
+        this.marker = marker;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+
+
+    public Pet() {
+    }
 
     public Pet(int id, String name, String image, String desc, String breed, String size, String type, String gender, int age, User user) {
         this.id = id;
