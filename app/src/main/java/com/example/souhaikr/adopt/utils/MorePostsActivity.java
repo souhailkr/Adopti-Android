@@ -3,8 +3,11 @@ package com.example.souhaikr.adopt.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +16,7 @@ import android.widget.ListView;
 
 import com.example.souhaikr.adopt.R;
 import com.example.souhaikr.adopt.controllers.APIClient;
+import com.example.souhaikr.adopt.controllers.PostsAdapter;
 import com.example.souhaikr.adopt.controllers.RecyclerViewAdapter;
 import com.example.souhaikr.adopt.entities.Pet;
 import com.example.souhaikr.adopt.interfaces.APIInterface;
@@ -23,6 +27,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.mapbox.android.gestures.Utils.dpToPx;
 
 public class MorePostsActivity extends AppCompatActivity {
 
@@ -39,6 +45,9 @@ public class MorePostsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_more_posts);
         RecyclerView myrv =  findViewById(R.id.recyclerview_pet_id);
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Handler mHandler = new Handler(Looper.getMainLooper());
+
         mActionBarToolbar.setTitle("Cats");
 
 
@@ -70,15 +79,24 @@ public class MorePostsActivity extends AppCompatActivity {
                 for(Pet size: contacts) {
                     System.out.println(size.toString());
 
-
-
                         pets.add(size) ;
 
 
-
-
-
                 }
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getApplicationContext(),pets);
+                        myrv.setLayoutManager(new GridLayoutManager(getApplicationContext(),3));
+                        myrv.setAdapter(myAdapter);
+
+
+
+
+                    }
+                });
 
 
 
@@ -92,10 +110,6 @@ public class MorePostsActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
-        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this,pets);
-        myrv.setLayoutManager(new GridLayoutManager(this,3));
-        myrv.setAdapter(myAdapter);
-
 
 
 

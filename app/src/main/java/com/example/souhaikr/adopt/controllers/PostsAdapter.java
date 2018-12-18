@@ -48,6 +48,25 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.MyViewHolder
         String url = mData.get(position).getImage() ;
         Picasso.get().load(url).into(holder.thumbnail);
 
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(mContext,DetailsActivity.class);
+
+
+
+                int id = mData.get(position).getId() ;
+                intent.putExtra("id",String.valueOf(id));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+
+
+                mContext.startActivity(intent);
+
+            }
+        });
+
 
 
 

@@ -66,7 +66,7 @@ public class SearchList extends AppCompatActivity {
 
 
                 contacts = response.body();
-                //contacts.addAll(response.body());
+
                 Log.d("TAG", String.valueOf(contacts));
 
 

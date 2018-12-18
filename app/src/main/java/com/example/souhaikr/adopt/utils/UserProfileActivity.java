@@ -2,6 +2,8 @@ package com.example.souhaikr.adopt.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -43,6 +45,7 @@ public class UserProfileActivity extends AppCompatActivity {
     ImageView profile_picture ;
     TextView total_posts ;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,8 @@ public class UserProfileActivity extends AppCompatActivity {
         useremail = findViewById(R.id.user_email) ;
         profile_picture = findViewById(R.id.profile_image) ;
         total_posts = findViewById(R.id.posts_number) ;
+
+        Handler mHandler = new Handler(Looper.getMainLooper());
 
         Toolbar toolbar = findViewById(R.id.toolbar) ;
         setSupportActionBar(toolbar);
@@ -78,9 +83,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 Log.d("TAG", String.valueOf(contacts));
 
 
-
-
-
                 for(Pet size: contacts) {
                     System.out.println(size.toString());
 
@@ -89,7 +91,9 @@ public class UserProfileActivity extends AppCompatActivity {
                     pets.add(size) ;
                     String userName= size.getUser().getFirstname() ;
                     String userImg = size.getUser().getPhoto() ;
+                    String userEmail = size.getUser().getEmail() ;
                     username.setText(userName);
+                    useremail.setText(userEmail);
                     Picasso.get().load(userImg).into(profile_picture);
 
 
@@ -99,6 +103,19 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
                 int total = contacts.size() ;
                 total_posts.setText(String.valueOf(total));
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        PostsAdapter myAdapter = new PostsAdapter(getApplicationContext(),pets);
+                        myrv.setLayoutManager(new GridLayoutManager(getApplicationContext(),3));
+                        myrv.addItemDecoration(new GridSpacingItemDecoration(3, (int) dpToPx(4), true));
+                        myrv.setItemAnimator(new DefaultItemAnimator());
+                        myrv.setNestedScrollingEnabled(false);
+                        myrv.setAdapter(myAdapter);
+
+                    }
+                });
 
 
 
@@ -113,12 +130,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
-        PostsAdapter myAdapter = new PostsAdapter(this,pets);
-        myrv.setLayoutManager(new GridLayoutManager(this,3));
-        myrv.addItemDecoration(new GridSpacingItemDecoration(3, (int) dpToPx(4), true));
-        myrv.setItemAnimator(new DefaultItemAnimator());
-        myrv.setNestedScrollingEnabled(false);
-        myrv.setAdapter(myAdapter);
+
 
 
 

@@ -1,5 +1,6 @@
 package com.example.souhaikr.adopt.interfaces;
 
+import com.example.souhaikr.adopt.entities.API;
 import com.example.souhaikr.adopt.entities.Pet;
 import com.example.souhaikr.adopt.entities.User;
 import com.google.gson.JsonElement;
@@ -23,6 +24,9 @@ import retrofit2.http.Path;
  */
 
 public interface APIInterface {
+
+    @GET("/breed.list?key=1abbf326403e6d3d360d9b9a5ad90da1&animal=type&format=json")
+    public Call<API> doGetLista() ;
 
 
 

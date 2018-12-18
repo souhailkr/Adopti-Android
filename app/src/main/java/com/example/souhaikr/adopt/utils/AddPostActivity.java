@@ -10,18 +10,22 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,11 +37,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.souhaikr.adopt.R;
+import com.example.souhaikr.adopt.controllers.APIBreed;
 import com.example.souhaikr.adopt.controllers.APIClient;
+import com.example.souhaikr.adopt.controllers.RecyclerViewAdapter;
+import com.example.souhaikr.adopt.entities.API;
+import com.example.souhaikr.adopt.entities.BreedName;
 import com.example.souhaikr.adopt.entities.Pet;
 import com.example.souhaikr.adopt.interfaces.APIInterface;
 
@@ -73,6 +82,11 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
     File f ;
     double longitude;
     double latitude ;
+    APIInterface apiInterface;
+    API p ;
+    ArrayAdapter<String> dataAdapter ;
+
+
 
 
 
@@ -487,31 +501,102 @@ public class AddPostActivity extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        ((TextView) view).setTextColor(Color.BLACK);
         String item = parent.getItemAtPosition(position).toString();
+        Handler mHandler = new Handler(Looper.getMainLooper());
 
-        // Showing selected spinner item
+        String typeName = null;
+
 
         if (typeList.getSelectedItem().equals("Bird")) {
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+            typeName = "Bird";
+
+        } else if (typeList.getSelectedItem().equals("Cat"))
+
+        {
+            typeName = "Cat";
+        }
+        else if (typeList.getSelectedItem().equals("Dog"))
+
+        {
+            typeName = "Dog";
+        }
+
+
+
+
+
+
+            Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
             List<String> categories = new ArrayList<String>();
-            categories.add("aaa");
-            categories.add("bbb");
-            categories.add("ccc");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
 
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Showing selected spinner item
+            apiInterface = APIBreed.getClient().create(APIInterface.class);
+            Call<API> call = apiInterface.doGetLista();
+            call.enqueue(new Callback<API>() {
+                @Override
+                public void onResponse(Call<API> call, Response<API> response) {
 
-        // attaching data adapter to spinner
-        breedList.setAdapter(dataAdapter);
 
-    }}
+                    p = response.body();
+                    //contacts.addAll(response.body());
+
+
+                    ArrayList<BreedName> bi = p.getPetfiner().getBreeds().getBreed();
+
+                    for (BreedName a : bi) {
+
+                        categories.add(a.getName());
+
+                    }
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+
+                            dataAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+
+                            // Drop down layout style - list view with radio button
+                            dataAdapter.setDropDownViewResource(R.layout.spinner_item);
+
+                            // attaching data adapter to spinner
+                            breedList.setAdapter(dataAdapter);
+
+
+
+                        }
+                    });
+
+
+
+                }
+
+                @Override
+                public void onFailure(Call<API> call, Throwable t) {
+                    call.cancel();
+                }
+            });
+
+        }
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 
 
 

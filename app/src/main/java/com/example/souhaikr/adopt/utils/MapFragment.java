@@ -6,8 +6,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +15,8 @@ import android.widget.Toast;
 
 import com.example.souhaikr.adopt.R;
 import com.example.souhaikr.adopt.controllers.APIClient;
-import com.example.souhaikr.adopt.entities.POICluster;
 import com.example.souhaikr.adopt.entities.Pet;
 import com.example.souhaikr.adopt.interfaces.APIInterface;
-import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineListener;
-import com.mapbox.android.core.location.LocationEnginePriority;
-import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -31,30 +24,23 @@ import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.plugins.cluster.clustering.ClusterManagerPlugin;
-import com.mapbox.mapboxsdk.plugins.cluster.clustering.view.ClusterRenderer;
-import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.ContentValues.TAG;
-import static com.example.souhaikr.adopt.R.string.user_location_permission_explanation;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.division;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
@@ -84,8 +70,7 @@ public class MapFragment extends Fragment implements  PermissionsListener{
     APIInterface apiInterface;
     private List<Pet> contacts ;
     MapboxMap mMapboxMap ;
-    private ClusterManagerPlugin<POICluster> clusterManagerPlugin;
-    private List<POICluster> poiClusterList = new ArrayList<>();
+
     String name ;
     String image ;
     HashMap<Long, Pet> innerMap = new HashMap<Long,Pet>();
